@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import About from "./Components/About";
+import Alert from "./Components/Alert";
+import Navbar from "./Components/Navbar";
+import TextForm from "./Components/TextForm";
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Routes,
+} from "react-router-dom";
+
 
 function App() {
+  const [mode, setMode] = useState('light');
+  const [alert, setAlert] = useState(null);
+  const ShowAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      types: type
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  }
+  const toggleMode = () => {
+    if (mode === 'dark') {
+      setMode('light')
+      document.body.style.backgroundColor = "white";
+      ShowAlert("Light Mode has been enabled", "success");
+    }
+    else {
+      setMode('dark')
+      document.body.style.backgroundColor = "black";
+      ShowAlert("Dark Mode has been enabled", "warning");
+    }
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/* <Router> */}
+
+        <Navbar title="HB's Text Management" mode={mode} toggleMode={toggleMode} About="About"/>
+        <Alert alerts={alert} />
+        {/* <div className="container">
+          <Routes>
+            <Route path="/about" element={
+             <About  />} />
+            <Route path="/" element={
+              <TextForm heading="Enter the Text to analyze" mode={mode} ShowAlert={ShowAlert} />} />
+          </Routes>
+        </div>
+      
+      </Router> */}
+      <TextForm heading="Enter the Text to analyze" mode={mode} ShowAlert={ShowAlert} />
+
+    </>
   );
 }
-
 export default App;
